@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_deneme/services/auth_service.dart';
@@ -18,6 +19,7 @@ class CounterApp extends StatelessWidget {
             child: CircularProgressIndicator(),
           ),
         );
+
       case UserState.notLoggedIn:
         return Scaffold(
           body: Center(
@@ -27,17 +29,47 @@ class CounterApp extends StatelessWidget {
                 const Text('If you want to use app please log in'),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {},
                   child: const Text('Sign Up'),
+                  onPressed: () async {
+                    // this is a basic sign up method it has not a signup screen
+                    var email = "provider@auth2.com";
+                    var password = "secretpassword";
+
+                    // I moved the try catch block to inform the user
+                    // where the error is.
+                    try {
+                      await myAuth.createUserWithEmailandPassword(
+                          email, password);
+                    } on FirebaseAuthException catch (e) {
+                      myAuth.state = UserState.notLoggedIn;
+                      if (e.code == 'email-already-in-use') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'The account already exists for that email.'),
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      myAuth.state = UserState.notLoggedIn;
+                      debugPrint("found a error in create user: $e");
+                    }
+                  },
                 ),
                 ElevatedButton(
-                  onPressed: () {},
                   child: const Text('Sign In'),
-                )
+                  onPressed: () async {
+                    var email = "provider@auth.com";
+                    var password = "secretpassword";
+                    await myAuth.signInUserWithEmailandPassword(
+                        email, password);
+                  },
+                ),
               ],
             ),
           ),
         );
+
       case UserState.loggedIn:
         return Scaffold(
           appBar: AppBar(

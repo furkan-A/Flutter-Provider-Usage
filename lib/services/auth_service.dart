@@ -5,9 +5,11 @@ enum UserState { loggedIn, notLoggedIn, loggingIn }
 
 class AuthService extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? _user;
   UserState _state = UserState.notLoggedIn;
 
   UserState get state => _state;
+  User? get user => _user;
 
   set state(UserState newState) {
     _state = newState;
@@ -20,9 +22,11 @@ class AuthService extends ChangeNotifier {
 
   void _authStateChanged(User? user) {
     if (user == null) {
+      _user = null;
       state = UserState.notLoggedIn;
       debugPrint('User is currently signed out.');
     } else {
+      _user = user;
       state = UserState.loggedIn;
       debugPrint('User signed in.');
     }
@@ -30,23 +34,19 @@ class AuthService extends ChangeNotifier {
 
   Future<User?> createUserWithEmailandPassword(
       String email, String password) async {
-    try {
-      state = UserState.loggingIn;
-      UserCredential _credential = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      User? _newUser = _credential.user;
-      return _newUser;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-    } catch (e) {
-      state = UserState.notLoggedIn;
-      debugPrint("found a error in create user: $e");
-      return null;
-    }
+    // try {
+    state = UserState.loggingIn;
+    UserCredential _credential = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    User? _newUser = _credential.user;
+    _user = _newUser;
+    return _newUser;
+    // }
+    // catch (e) {
+    //   state = UserState.notLoggedIn;
+    //   debugPrint("found a error in create user: $e");
+    //   return null;
+    // }
   }
 
   Future<User?> signInUserWithEmailandPassword(
@@ -55,8 +55,9 @@ class AuthService extends ChangeNotifier {
       state = UserState.loggingIn;
       UserCredential _credential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      User? _user = _credential.user;
-      return _user;
+      User? _loggedInUser = _credential.user;
+      _user = _loggedInUser;
+      return _loggedInUser;
     } catch (e) {
       state = UserState.notLoggedIn;
       debugPrint("found a error in sign in user: $e");
@@ -64,10 +65,11 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<bool> signOut(String email, String password) async {
+  Future<bool> signOut() async {
     try {
-      await _auth.signOut();
       state = UserState.notLoggedIn;
+      await _auth.signOut();
+      _user = null;
       return true;
     } catch (e) {
       debugPrint("found a error in sign out: $e");
