@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider_deneme/counter.dart';
+import 'package:provider_deneme/models/counter.dart';
 
 class MyFloatingActionButtons extends StatelessWidget {
   const MyFloatingActionButtons({

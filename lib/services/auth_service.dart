@@ -36,6 +36,12 @@ class AuthService extends ChangeNotifier {
           email: email, password: password);
       User? _newUser = _credential.user;
       return _newUser;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
     } catch (e) {
       state = UserState.notLoggedIn;
       debugPrint("found a error in create user: $e");

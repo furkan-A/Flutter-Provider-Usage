@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider_deneme/auth_service.dart';
-import 'package:provider_deneme/display_counter.dart';
-import 'package:provider_deneme/floating_action_button.dart';
+import 'package:provider_deneme/services/auth_service.dart';
+import 'package:provider_deneme/widgets/display_counter.dart';
+import 'package:provider_deneme/widgets/floating_action_button.dart';
 
 class CounterApp extends StatelessWidget {
   const CounterApp({Key? key}) : super(key: key);
@@ -18,11 +18,24 @@ class CounterApp extends StatelessWidget {
             child: CircularProgressIndicator(),
           ),
         );
-
       case UserState.notLoggedIn:
-        return const Scaffold(
+        return Scaffold(
           body: Center(
-            child: Text('If you want to use app please log in'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('If you want to use app please log in'),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Sign Up'),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Sign In'),
+                )
+              ],
+            ),
           ),
         );
       case UserState.loggedIn:

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider_deneme/auth_service.dart';
-import 'package:provider_deneme/counter.dart';
-import 'package:provider_deneme/counter_app.dart';
+import 'package:provider_deneme/services/auth_service.dart';
+import 'package:provider_deneme/models/counter.dart';
+import 'package:provider_deneme/views/counter_app.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
