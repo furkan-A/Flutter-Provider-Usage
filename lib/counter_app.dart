@@ -12,7 +12,7 @@ class CounterApp extends StatelessWidget {
         title: const Text("Counter app with provider"),
       ),
       body: const Center(
-        child: MyColumn(),
+        child: DisplayCounter(),
       ),
       floatingActionButton: const MyFloatingActionButtons(),
     );

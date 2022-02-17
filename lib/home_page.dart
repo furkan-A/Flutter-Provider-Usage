@@ -27,8 +27,12 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ChangeNotifierProvider<Counter>(
-                      create: (_) => Counter(initialValue),
+                    builder: (context) => MultiProvider(
+                      providers: [
+                        ChangeNotifierProvider(
+                          create: (_) => Counter(initialValue),
+                        ),
+                      ],
                       child: const CounterApp(),
                     ),
                   ),

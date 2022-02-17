@@ -38,7 +38,7 @@ class AuthService extends ChangeNotifier {
       return _newUser;
     } catch (e) {
       state = UserState.notLoggedIn;
-      debugPrint("found a error: $e");
+      debugPrint("found a error in create user: $e");
       return null;
     }
   }
@@ -53,8 +53,19 @@ class AuthService extends ChangeNotifier {
       return _user;
     } catch (e) {
       state = UserState.notLoggedIn;
-      debugPrint("found a error: $e");
+      debugPrint("found a error in sign in user: $e");
       return null;
+    }
+  }
+
+  Future<bool> signOut(String email, String password) async {
+    try {
+      await _auth.signOut();
+      state = UserState.notLoggedIn;
+      return true;
+    } catch (e) {
+      debugPrint("found a error in sign out: $e");
+      return false;
     }
   }
 }
