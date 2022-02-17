@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_deneme/auth_service.dart';
 import 'package:provider_deneme/counter.dart';
 import 'package:provider_deneme/counter_app.dart';
 
@@ -31,6 +32,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       providers: [
                         ChangeNotifierProvider(
                           create: (_) => Counter(initialValue),
+                        ),
+                        ChangeNotifierProvider(
+                          create: (_) => AuthService(),
                         ),
                       ],
                       child: const CounterApp(),
